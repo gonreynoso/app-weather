@@ -1,13 +1,35 @@
-import { countries } from "../data/countries";
+import { countries } from "../../data/countries";
+import { useState } from "react";
+import { SearchType } from "../../types";
 
 const Form = () => {
+  const [search, setSearch] = useState<SearchType>({
+    city: "",
+    country: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setSearch({
+      ...search,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <form className="form flex flex-col gap-4 ">
       <div className="country border border-gray-300 p-2  rounded-lg">
         <label htmlFor="country" className="mr-10">
           País:
         </label>
-        <select className="cursor-pointer">
+        <select
+          className="cursor-pointer"
+          id="country"
+          value={search.country}
+          name="country"
+          onChange={handleChange}
+        >
           <option value=""> -- Seleccione un país -- </option>
           {countries.map((country) => (
             <option key={country.code} value={country.code}>
@@ -27,6 +49,8 @@ const Form = () => {
           name="city"
           placeholder="Nombre de la ciudad"
           className="bg-transparent placeholder-white text-white "
+          value={search.city}
+          onChange={handleChange}
         />
       </div>
 
