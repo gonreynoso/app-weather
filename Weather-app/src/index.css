@@ -29,7 +29,7 @@ a:hover {
 } */
 
 body {
-  background: url("../public/bg_clima.jpg") no-repeat;
+  background: url("/bg_clima.jpg") no-repeat;
   height: 100vh;
   background-size: cover;
 }
