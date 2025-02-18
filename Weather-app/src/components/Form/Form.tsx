@@ -1,45 +1,65 @@
 import { countries } from "../../data/countries";
 import { useState } from "react";
 import { SearchType } from "../../types";
+import Alert from "../Alert/Alert";
 
-const Form = () => {
-  const [search, setSearch] = useState<SearchType>({
+type FormProps = {
+    fetchWeather: () => void;
+}
+
+export default function Form({fetchWeather}: FormProps) {
+    const [search, setSearch] = useState<SearchType>({
     city: "",
     country: "",
-  });
+    });
 
-  const handleChange = (
+    const [alert, setAlert] = useState<string>("");
+
+    const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setSearch({
       ...search,
       [e.target.name]: e.target.value,
     });
-  };
+    };
 
-  return (
-    <form className="form flex flex-col gap-4 ">
-      <div className="country border border-gray-300 p-2  rounded-lg">
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(Object.values(search).includes("")){
+        setAlert("Todos los campos son obligatorios");
+        return;
+    }
+
+    fetchWeather();
+    }
+
+    return (
+    <form className="form flex flex-col gap-4"
+    onSubmit={handleSubmit}
+    >
+        {alert && <Alert>{alert}</Alert>}
+        <div className="country border border-gray-300 p-2  rounded-lg">
         <label htmlFor="country" className="mr-10">
-          País:
+            País:
         </label>
         <select
-          className="cursor-pointer"
-          id="country"
-          value={search.country}
-          name="country"
-          onChange={handleChange}
+            className="cursor-pointer"
+            id="country"
+            value={search.country}
+            name="country"
+            onChange={handleChange}
         >
-          <option value=""> -- Seleccione un país -- </option>
-          {countries.map((country) => (
-            <option key={country.code} value={country.code}>
-              {country.name}
-            </option>
-          ))}
+            <option value=""> -- Seleccione un país -- </option>
+            {countries.map((country) => (
+                <option key={country.code} value={country.code}>
+                {country.name}
+                </option>
+            ))}
         </select>
-      </div>
+        </div>
 
-      <div className="city border border-gray-300 p-2 rounded-lg  ">
+        <div className="city border border-gray-300 p-2 rounded-lg  ">
         <label htmlFor="city" className="mr-6">
           Ciudad:
         </label>
@@ -52,13 +72,13 @@ const Form = () => {
           value={search.city}
           onChange={handleChange}
         />
-      </div>
+        </div>
 
-      <input
+        <input
         type="submit"
         value="Consultar Clima"
         className="border border-gray-300 p-1 hover:bg-blue-700 hover:text-white bg-gray-600 text-white uppercase cursor-pointer rounded-lg"
-      />
+        />
     </form>
-  );
+    );
 };
