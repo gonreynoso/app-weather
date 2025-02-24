@@ -4,7 +4,7 @@ import useWeather from "./hooks/useWeather";
 
 function App() {
 
-  const { fetchWaether } = useWeather();
+  const { fetchWeather } = useWeather();
   return (
     <>
       <h1 className="text-center font-bold text-2xl pt-10 pb-10">
@@ -13,7 +13,7 @@ function App() {
 
       <div className="w-5/6 mx-auto max-w-full  md:w-3/4 lg:w-2/3 xl:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-4 mt-5 text-center">
         <Form
-          fetchWeather={fetchWaether}
+          fetchWeather={fetchWeather}
         
         />
         <p>2</p>

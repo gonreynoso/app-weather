@@ -1,5 +1,5 @@
 export type SearchType = {
-  city: string;
+  name: string;
   country: string;
 };
 
