@@ -60,7 +60,7 @@ export default function Form({fetchWeather}: FormProps) {
         </div>
 
         <div className="city border border-gray-300 p-2 rounded-lg  ">
-        <label htmlFor="name" className="mr-6">
+        <label htmlFor="city" className="mr-6">
             Ciudad:
         </label>
         <input
