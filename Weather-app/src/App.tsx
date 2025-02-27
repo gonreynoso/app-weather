@@ -1,10 +1,11 @@
 import "./App.css";
 import Form from "./components/Form/Form";
+import WeatherDetail from "./components/WeatherDetail/WeatherDetail";
 import useWeather from "./hooks/useWeather";
 
 function App() {
 
-  const { fetchWeather } = useWeather();
+  const { fetchWeather, weather, hasWeatherData } = useWeather();
   return (
     <>
       <h1 className="text-center font-bold text-2xl pt-10 pb-10">
@@ -16,7 +17,8 @@ function App() {
           fetchWeather={fetchWeather}
         
         />
-        <p>2</p>
+        {hasWeatherData && <WeatherDetail weather={weather} />}
+
       </div>
     </>
   );
