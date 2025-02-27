@@ -4,12 +4,12 @@ import { SearchType } from "../../types";
 import Alert from "../Alert/Alert";
 
 type FormProps = {
-    fetchWeather: () => void;
+    fetchWeather: (search: SearchType) => Promise<void>;
 }
 
 export default function Form({fetchWeather}: FormProps) {
     const [search, setSearch] = useState<SearchType>({
-    city: "",
+    name: "",
     country: "",
     });
 
@@ -17,10 +17,10 @@ export default function Form({fetchWeather}: FormProps) {
 
     const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+    ) => {
     setSearch({
-      ...search,
-      [e.target.name]: e.target.value,
+        ...search,
+        [e.target.name]: e.target.value,
     });
     };
 
@@ -31,7 +31,7 @@ export default function Form({fetchWeather}: FormProps) {
         return;
     }
 
-    fetchWeather();
+    fetchWeather(search);
     }
 
     return (
@@ -39,18 +39,18 @@ export default function Form({fetchWeather}: FormProps) {
     onSubmit={handleSubmit}
     >
         {alert && <Alert>{alert}</Alert>}
-        <div className="country border border-gray-300 p-2  rounded-lg">
-        <label htmlFor="country" className="mr-10">
+        <label htmlFor="country" className="text-left">
             País:
         </label>
+        <div className="country border border-gray-300 p-2 rounded-lg text-left pr-8">
         <select
-            className="cursor-pointer"
+            className="cursor-pointer "
             id="country"
             value={search.country}
             name="country"
             onChange={handleChange}
         >
-            <option value=""> -- Seleccione un país -- </option>
+            <option value="">Seleccione un país</option>
             {countries.map((country) => (
                 <option key={country.code} value={country.code}>
                 {country.name}
@@ -59,19 +59,19 @@ export default function Form({fetchWeather}: FormProps) {
         </select>
         </div>
 
-        <div className="city border border-gray-300 p-2 rounded-lg  ">
-        <label htmlFor="city" className="mr-6">
-          Ciudad:
+        <label htmlFor="city" className="text-left">
+            Ciudad:
         </label>
+        <div className="city border border-gray-300 p-2 rounded-lg text-left  ">
         <input
-          id="city"
-          type="text"
-          name="city"
-          placeholder="Nombre de la ciudad"
-          className="bg-transparent placeholder-white text-white "
-          value={search.city}
-          onChange={handleChange}
-        />
+            id="city"
+            type="text"
+            name="name"
+            placeholder="Nombre de la ciudad"
+            className="bg-transparent placeholder-white text-white"
+            value={search.name}
+            onChange={handleChange}
+            />
         </div>
 
         <input
