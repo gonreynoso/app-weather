@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SearchType } from '../types';
 // import { WeatherType  } from '../types';
-import { z } from 'zod';
+import { set, z } from 'zod';
 import { useMemo, useState } from 'react';
 // import { object, string, number, InferOutput, parse} from 'valibot';
 
@@ -43,22 +43,28 @@ export type WeatherSchema = z.infer<typeof WeatherSchema>;
 // type WeatherSchema = InferOutput<typeof WeatherSchema>;
 
 
-
-
-export default function useWeather() {
-
-const [weather, setWeather] = useState<WeatherSchema>({
+const initialState = {
     name: "",
     main: {
         temp: 0,
         temp_min: 0,
         temp_max: 0
     }
-});
+}
 
-const APPID = import.meta.env.VITE_API_KEY;
+export default function useWeather() {
+
+const [weather, setWeather] = useState<WeatherSchema>(initialState);
+
+const [loading, setLoading] = useState(false);
+
+const [notFound, setNotFound] = useState(false);
+
 
 const fetchWeather =  async (search : SearchType) => {
+    const APPID = import.meta.env.VITE_API_KEY;
+    setLoading(true);
+    setWeather(initialState);
     try {
         
         const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search.name},${search.country}&appid=${APPID}`;
@@ -67,10 +73,11 @@ const fetchWeather =  async (search : SearchType) => {
         
 
         const {data} = await axios.get(geoUrl);
-        if (!data || data.length === 0) {
-            throw new Error("No se encontraron coordenadas para la ubicación proporcionada.");
+        //comprobar si existe latitud y longitud
+        if (!data[0]) {
+            setNotFound(true);
+            return;
         }
-        
         const lat = data[0].lat;
         const lon = data[0].lon;
 
@@ -116,6 +123,8 @@ const fetchWeather =  async (search : SearchType) => {
 
     } catch (error) {
         console.log(error);
+    } finally {
+        setLoading(false);
     }
     
 }
@@ -125,6 +134,8 @@ const hasWeatherData = useMemo(() => weather.name , [weather]);
 
 return{
     weather,
+    loading,
+    notFound,
     fetchWeather,
     hasWeatherData
 }
